@@ -1,2 +1,0 @@
-/usr/bin/ar qc libClibrary.a CMakeFiles/Clibrary.dir/int_add.c.o CMakeFiles/Clibrary.dir/int_division.c.o CMakeFiles/Clibrary.dir/int_multiply.c.o CMakeFiles/Clibrary.dir/int_subtract.c.o
-/usr/bin/ranlib libClibrary.a
