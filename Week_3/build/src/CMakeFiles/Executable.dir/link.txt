@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/Executable.dir/main.c.o -o ../../bin/Executable  -Wl,-rpath,/home/tyler/UTSA_Embedded_Sys/Week_3/build/src/int_arithmetic:/home/tyler/UTSA_Embedded_Sys/Week_3/build/src/double_arithmetic int_arithmetic/libClibrary.so double_arithmetic/libCPPlibrary.so 
+/usr/bin/c++ CMakeFiles/Executable.dir/main.c.o -o ../../bin/Executable  int_arithmetic/libClibrary.a double_arithmetic/libCPPlibrary.a 

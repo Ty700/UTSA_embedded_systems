@@ -1,1 +1,2 @@
-/usr/bin/c++ -fPIC -shared -Wl,-soname,libCPPlibrary.so -o libCPPlibrary.so CMakeFiles/CPPlibrary.dir/double_add.cpp.o CMakeFiles/CPPlibrary.dir/double_divide.cpp.o CMakeFiles/CPPlibrary.dir/double_multiply.cpp.o CMakeFiles/CPPlibrary.dir/double_subtract.cpp.o 
+/usr/bin/ar qc libCPPlibrary.a CMakeFiles/CPPlibrary.dir/double_add.cpp.o CMakeFiles/CPPlibrary.dir/double_divide.cpp.o CMakeFiles/CPPlibrary.dir/double_multiply.cpp.o CMakeFiles/CPPlibrary.dir/double_subtract.cpp.o
+/usr/bin/ranlib libCPPlibrary.a

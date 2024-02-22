@@ -7,8 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Clibrary.dir/int_multiply.c.o.d"
   "CMakeFiles/Clibrary.dir/int_subtract.c.o"
   "CMakeFiles/Clibrary.dir/int_subtract.c.o.d"
+  "libClibrary.a"
   "libClibrary.pdb"
-  "libClibrary.so"
 )
 
 # Per-language clean rules from dependency scanning.

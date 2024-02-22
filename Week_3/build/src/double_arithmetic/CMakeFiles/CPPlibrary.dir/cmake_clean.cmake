@@ -7,8 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/CPPlibrary.dir/double_multiply.cpp.o.d"
   "CMakeFiles/CPPlibrary.dir/double_subtract.cpp.o"
   "CMakeFiles/CPPlibrary.dir/double_subtract.cpp.o.d"
+  "libCPPlibrary.a"
   "libCPPlibrary.pdb"
-  "libCPPlibrary.so"
 )
 
 # Per-language clean rules from dependency scanning.
