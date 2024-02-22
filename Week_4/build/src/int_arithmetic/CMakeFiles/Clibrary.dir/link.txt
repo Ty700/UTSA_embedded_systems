@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -shared -Wl,-soname,libClibrary.so -o libClibrary.so CMakeFiles/Clibrary.dir/int_add.c.o CMakeFiles/Clibrary.dir/int_division.c.o CMakeFiles/Clibrary.dir/int_multiply.c.o CMakeFiles/Clibrary.dir/int_subtract.c.o 
