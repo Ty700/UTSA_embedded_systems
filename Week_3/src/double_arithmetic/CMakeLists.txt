@@ -4,7 +4,7 @@ set(CXX_LIBRARY_SOURCES
     "double_multiply.cpp"
     "double_subtract.cpp")
 
-add_library(${CXX_LIBRARY}
+add_library(${CXX_LIBRARY} STATIC
             ${CXX_LIBRARY_SOURCES}
             ${CXX_LIBRARY_HEADERS}
             )   
