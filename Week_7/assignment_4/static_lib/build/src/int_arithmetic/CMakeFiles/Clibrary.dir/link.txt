@@ -1,0 +1,2 @@
+//duo-sdk/riscv64-linux-musl-x86_64/bin/riscv64-unknown-linux-musl-ar qc libClibrary.a CMakeFiles/Clibrary.dir/int_add.c.o CMakeFiles/Clibrary.dir/int_division.c.o CMakeFiles/Clibrary.dir/int_multiply.c.o CMakeFiles/Clibrary.dir/int_subtract.c.o
+//duo-sdk/riscv64-linux-musl-x86_64/bin/riscv64-unknown-linux-musl-ranlib libClibrary.a
