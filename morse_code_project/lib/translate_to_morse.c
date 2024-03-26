@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "translate_to_morse.h"
+
+#define HASH_ERROR 254
 /*
 * FUNCTION:
 *   Determines if a character is in the English alphabet or a number 0-9
@@ -57,8 +60,13 @@ void toLowercase(uint8_t* c){
 *   It's name is most likely kermit.
 *
 * RETURNS:
-*   50 => Hashing error
+*   HASH_ERROR => Default 254. Hashing error.
 *   An int between 0 and 36 that corresponds with the character's morse code index in the array.
+*
+*
+* TODO:
+*   Figure out a new ret value for hash error.
+*   254 should be impossible to reach but I have been wrong before.
 */
 uint8_t characterToIndexHash(const char* c){
     if(*c >= 'a' && *c <= 'z'){
@@ -80,7 +88,7 @@ uint8_t characterToIndexHash(const char* c){
         return (*c - '0' + 26);
     } else {
         //Dead code. Should never get here since c is already checked, but prelim caution just in-case
-        return 50;
+        return HASH_ERROR;
     }
 }
 
@@ -165,7 +173,7 @@ const uint8_t* charToTranslate(char c){
 #endif /*DEBUG*/
 
     //Error check
-    if(characterIndex == 50){
+    if(characterIndex == HASH_ERROR){
         fprintf(stderr, "Error hashing character.\n");
         return NULL; //<= So the compiler will shut up
     }
@@ -173,10 +181,9 @@ const uint8_t* charToTranslate(char c){
     return morseCode[characterIndex];
 }
 
-int main(){
-    char testChars[] = {'A', 'B', 'C', '0', '`', 'T'};
-
-    for(int i = 0; i < 6; i++){
-        printf("Character: %c => %s\n", testChars[i], charToTranslate(testChars[i]));
-    }
-}
+/*TODO
+*
+*   Make a function that takes in a string and outputs the morse code of entire string
+*
+*
+*/
