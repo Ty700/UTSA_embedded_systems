@@ -1,26 +1,28 @@
-#include <stdio.h>
 #include <stdint.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "translate_to_morse.h"
 
-#define HASH_ERROR 254
+#define OUTFILE "test.txt"
+
 /*
-* FUNCTION:
-*   Determines if a character is in the English alphabet or a number 0-9
+* isAlphaNumberic -> Determines if a character is in the English alphabet or a number 0-9
 *
-* INPUT:
+* @INPUTS:
 *   A character... dyh
 *
-* RETURNS:
+* @RETURNS:
 *   1: Character is in the alphabet | a number
 *   0: Character is NOT in the alphabet | a number
 */
 
-uint32_t isAlphaNumberic(uint8_t c){
+static uint32_t isAlphaNumeric(const uint8_t* c){
     //ASCII stuff, "It just works" - Todd Howard
-    if( (c >= 'A' && c <= 'Z') ||
-        (c >= 'a' && c <= 'z') ||
-        (c >= '0' && c <= '9')) 
+    if( (*c >= 'A' && *c <= 'Z') ||
+        (*c >= 'a' && *c <= 'z') ||
+        (*c >= '0' && *c <= '9')) 
         {
             return 1;
         }
@@ -29,20 +31,19 @@ uint32_t isAlphaNumberic(uint8_t c){
 }
 
 /*
-* FUNCTION:
-*   To avoid importing an entire lib for tolower, I have made this.
+* toLowercase -> To avoid importing an entire lib for tolower, I have made this.
 *   Simply alters a character to be lowercase
 * 
-* INPUTS:
+* @INPUTS:
 *   A character
 *       - an alphabetical character
 *       - HAS BEEN CHECKED ALREADY
 *
-* RETURNS:
+* @RETURNS:
 *   VOID => Alters character in place to avoid passing by copy
 */
 
-void toLowercase(uint8_t* c){
+static void toLowercase(uint8_t* c){
     //Check if upper
     if(*c >= 'A' && *c <= 'Z'){
         *c += 32;
@@ -50,16 +51,15 @@ void toLowercase(uint8_t* c){
 }
 
 /*
-* FUNCTION: 
-*   calculates an index representing the position of a character's Morse code in an array
+* characterToIndexHash() -> calculates an index representing the position of a character's Morse code in an array
 *
-* INPUTS:
+* @INPUTS:
 *   Can you guess? That's right! A frog!
 *   THIS FROG CAN NOT BE CHANGED
 *   FROG HAS BEEN CHECKED AND IS A VALID FROG. 
 *   It's name is most likely kermit.
 *
-* RETURNS:
+* @RETURNS:
 *   HASH_ERROR => Default 254. Hashing error.
 *   An int between 0 and 36 that corresponds with the character's morse code index in the array.
 *
@@ -68,7 +68,7 @@ void toLowercase(uint8_t* c){
 *   Figure out a new ret value for hash error.
 *   254 should be impossible to reach but I have been wrong before.
 */
-uint8_t characterToIndexHash(const char* c){
+static uint8_t characterToIndexHash(const uint8_t* c){
     if(*c >= 'a' && *c <= 'z'){
         /*Maps  a => 0
         *       b => 1
@@ -94,22 +94,21 @@ uint8_t characterToIndexHash(const char* c){
 
 
 /*
-* FUNCTION: 
-*    Translates a character (usually passed by a helper function) to morse code
+* charToTranslate() -> Translates a character (usually passed by a helper function) to morse code
 * 
-* INPUTS:
+* @INPUTS:
 *    A character... any character.  
 *
-* RETURNS:
+* @RETURNS:
 *    NULL               => Non-valid characters | Hashing Error
 *                           -stderr will tell user which it is
 *
 *    Non-empty string   => For when character passed is a valid character
 */
 
-const uint8_t* charToTranslate(char c){
+static uint8_t* charToTranslate(uint8_t* c){
 
-    static const uint8_t* morseCode[36] = {
+    static uint8_t* morseCode[36] = {
         /*A*/   ".-", 
         /*B*/   "-...", 
         /*C*/   "-.-.", 
@@ -150,27 +149,28 @@ const uint8_t* charToTranslate(char c){
     };
 
     //Checks if character passed is valid
-    if(!isAlphaNumberic(c)){
+    if(!isAlphaNumeric(c)){
+        
+        debug("\n%c: Character is not alphabetical nor a number 0-9.\n", *c);
+
+        #ifndef MORSE_DEBUG //It seems stderr prints before stdout??
         fprintf(stderr, "Character is not alphabetical nor a number 0-9.\n");
+        #endif /*MORSE_DEBUG*/
         return NULL;
     }
 
-#ifdef DEBUG
-    printf("Before: %c\n", c);
-#endif/*DEBUG*/
+    debug("\nBefore: %c\n", *c);
 
     //Converts the character to lowercase
-    toLowercase(&c);
+    toLowercase(c);
 
-#ifdef DEBUG
-    printf("After: %c\n", c);
-#endif /*DEBUG*/
+    debug("\nAfter: %c\n", *c);
 
-    uint8_t characterIndex = characterToIndexHash(&c);
-    
-#ifdef DEBUG
-    printf("%c index in morseCode: %d", c, characterIndex);
-#endif /*DEBUG*/
+    uint8_t characterIndex = characterToIndexHash(c);
+
+    debug("\n%c index in morseCode: %d\n", *c, characterIndex);
+
+    debug("\n%c in morse code: %s\n", *c, morseCode[characterIndex]);
 
     //Error check
     if(characterIndex == HASH_ERROR){
@@ -181,9 +181,81 @@ const uint8_t* charToTranslate(char c){
     return morseCode[characterIndex];
 }
 
-/*TODO
+CharacterList* createNewCharacterNode(){
+    CharacterList* new_node = calloc(1, sizeof(*new_node));
+
+    return new_node; 
+}
+
+void freeMorseCodeList(CharacterList* head){
+    while(head != NULL){
+        CharacterList* delete = head;
+        head = head->next;
+        free(delete);
+    }
+}
+
+/*
+* phraseToTranslate() -> Translates a phrase to morse code
+* 
+* @INPUTS:
+*    -A phrase
+*    -Phrase Length
 *
-*   Make a function that takes in a string and outputs the morse code of entire string
+* @RETURNS:
+*    NULL => Phrase containts non-valid characters
+*           - TODO: Change this to where it just omits the characters a continues???
 *
-*
+*    Non-empty string   => For when phrase passed is valid
+* 
+* Designing this so each character is a node in a linked list.
+*   Why? Because I don't want to have a buffer limit (capping the phrase character limit)... bad idea? Probably. Esp for a small milk boy.
 */
+
+extern CharacterList* phraseToTranslate(uint8_t* phrase){
+    CharacterList* head = NULL;
+    CharacterList* current = NULL;
+    
+    while(*phrase != '\0'){
+        CharacterList* new_character = createNewCharacterNode();
+        new_character->character = *phrase;
+        new_character->morseCodeTranslation = charToTranslate(phrase);
+
+        if(head == NULL){
+            head = new_character;
+            current = new_character;
+        } else {
+            current->next = new_character;
+            current = current->next;
+        }
+        
+        phrase++;
+    }
+    return head;
+}
+
+int main(void){
+    FILE *fd = fopen(OUTFILE, "w");
+
+    if(!fd){
+        fprintf(stderr, "Error opening %s", OUTFILE);
+    }
+
+    char phrase[] = "Hello";
+
+    CharacterList* morseCodeHead = phraseToTranslate(phrase);
+
+    while(morseCodeHead != NULL){
+        char* code = morseCodeHead->morseCodeTranslation;
+        fputs(code, fd);
+        fputs(" / ", fd);
+        morseCodeHead = morseCodeHead->next;
+    }
+
+    fclose(fd);
+    freeMorseCodeList(morseCodeHead);
+}
+
+void test(){
+    printf("Hello World!\n");
+}
