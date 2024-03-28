@@ -1,1 +1,2 @@
-./build/*
+/morse_code_project/build
+/morse_code_project/.vscode
