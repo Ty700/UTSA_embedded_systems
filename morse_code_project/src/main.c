@@ -6,7 +6,8 @@
 int main(){
     char text[] = "Hello World!";
 
-    phraseToTranslate(text);
+    uint8_t* morseCodePhrase = phraseToTranslate(text);
 
+    printf("%s\n", morseCodePhrase);
     return 0;
 }

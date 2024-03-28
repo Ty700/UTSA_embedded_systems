@@ -1,0 +1,2 @@
+/usr/bin/ar qc libTRANSLIB.a CMakeFiles/TRANSLIB.dir/translate_to_morse.c.o
+/usr/bin/ranlib libTRANSLIB.a

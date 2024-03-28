@@ -5,8 +5,6 @@
 
 #include "translate_to_morse.h"
 
-#define OUTFILE "test.txt"
-
 /*
 * isAlphaNumberic -> Determines if a character is in the English alphabet or a number 0-9
 *
@@ -100,17 +98,17 @@ static uint8_t characterToIndexHash(const uint8_t* c){
 *    A character... any character.  
 *
 * @RETURNS:
-*    NULL               => Non-valid characters | Hashing Error
+*    50                  => Non-valid characters | Hashing Error
 *                           -stderr will tell user which it is
-*
+*   
 *    Non-empty string   => For when character passed is a valid character
 */
 
 static uint8_t* charToTranslate(uint8_t* c){
 
-    static uint8_t* morseCode[36] = {
-        /*A*/   ".-", 
-        /*B*/   "-...", 
+    static uint8_t* morseCode[37] = {
+        /*A*/   ".-",   
+        /*B*/   "-...",
         /*C*/   "-.-.", 
         /*D*/   "-..",
         /*E*/   ".",
@@ -146,36 +144,41 @@ static uint8_t* charToTranslate(uint8_t* c){
         /*7*/   "--...",
         /*8*/   "---..",
         /*9*/   "----.",
+
+        /* */   "/",
     };
+
+    //Handles spaces
+    if(*c == 32){
+        debug("%c in morse code: %s\n", *c, morseCode[36]);
+        return morseCode[36];
+    }
 
     //Checks if character passed is valid
     if(!isAlphaNumeric(c)){
         
         debug("\n%c: Character is not alphabetical nor a number 0-9.\n", *c);
 
-        #ifndef MORSE_DEBUG //It seems stderr prints before stdout??
-        fprintf(stderr, "Character is not alphabetical nor a number 0-9.\n");
-        #endif /*MORSE_DEBUG*/
-        return NULL;
+        return c;
     }
 
-    debug("\nBefore: %c\n", *c);
+    debug("   Before: %c\n", *c);
 
     //Converts the character to lowercase
     toLowercase(c);
 
-    debug("\nAfter: %c\n", *c);
+    debug("   After: %c\n", *c);
 
     uint8_t characterIndex = characterToIndexHash(c);
 
-    debug("\n%c index in morseCode: %d\n", *c, characterIndex);
+    debug("   %c index in morseCode: %d\n", *c, characterIndex);
 
-    debug("\n%c in morse code: %s\n", *c, morseCode[characterIndex]);
+    debug("   %c in morse code: %s\n", *c, morseCode[characterIndex]);
 
     //Error check
     if(characterIndex == HASH_ERROR){
         fprintf(stderr, "Error hashing character.\n");
-        return NULL; //<= So the compiler will shut up
+        return NULL; 
     }
 
     return morseCode[characterIndex];
@@ -184,10 +187,19 @@ static uint8_t* charToTranslate(uint8_t* c){
 CharacterList* createNewCharacterNode(){
     CharacterList* new_node = calloc(1, sizeof(*new_node));
 
+    if(!new_node){
+        fprintf(stderr, "Error: Couldn't calloc memory for new_node.\n");
+    }
+
     return new_node; 
 }
 
 void freeMorseCodeList(CharacterList* head){
+    if(head == NULL){
+        fprintf(stderr, "You passed a NULL head. RIP.\n");
+        return;
+    }
+
     while(head != NULL){
         CharacterList* delete = head;
         head = head->next;
@@ -200,11 +212,9 @@ void freeMorseCodeList(CharacterList* head){
 * 
 * @INPUTS:
 *    -A phrase
-*    -Phrase Length
 *
 * @RETURNS:
 *    NULL => Phrase containts non-valid characters
-*           - TODO: Change this to where it just omits the characters a continues???
 *
 *    Non-empty string   => For when phrase passed is valid
 * 
@@ -212,50 +222,49 @@ void freeMorseCodeList(CharacterList* head){
 *   Why? Because I don't want to have a buffer limit (capping the phrase character limit)... bad idea? Probably. Esp for a small milk boy.
 */
 
-extern CharacterList* phraseToTranslate(uint8_t* phrase){
-    CharacterList* head = NULL;
-    CharacterList* current = NULL;
-    
-    while(*phrase != '\0'){
-        CharacterList* new_character = createNewCharacterNode();
-        new_character->character = *phrase;
-        new_character->morseCodeTranslation = charToTranslate(phrase);
+// Modify the function signature to return a string instead of a linked list
+extern uint8_t* phraseToTranslate(uint8_t* phrase) {
+    // Count the number of characters in the phrase
+    uint32_t phrase_length = 0;
+    while (phrase[phrase_length] != '\0') {
+        phrase_length++;
+    }
 
-        if(head == NULL){
-            head = new_character;
-            current = new_character;
-        } else {
-            current->next = new_character;
-            current = current->next;
-        }
+    // Calculate the maximum possible size needed for the resulting Morse code translation
+    uint32_t max_result_size = phrase_length * 5; // Maximum 5 Morse code characters per English character
+    uint32_t result_size = 0;
+
+    // Allocate memory for the resulting Morse code translation
+    uint8_t* result = calloc(max_result_size + 1, sizeof(uint8_t)); // +1 for null terminator
+    if (result == NULL) {
+        fprintf(stderr, "Error: Memory allocation failed for Morse translation.\n");
+        return NULL;
+    }
+
+    // Concatenate the Morse code translations of each character into the result string
+    uint8_t* result_ptr = result;
+
+    while (*phrase != '\0') {
+        uint8_t* morse_translation = charToTranslate(phrase);
         
+        if (morse_translation != NULL) {
+            // Copy Morse code translation to the result string
+            uint32_t morse_length = 0;
+            
+            while (morse_translation[morse_length] != '\0') {
+                result_ptr[result_size++] = morse_translation[morse_length++];
+            }
+
+            // Add space between characters except for the last one
+            if (*(phrase + 1) != '\0') {
+                result_ptr[result_size++] = ' ';
+            }
+        }
         phrase++;
     }
-    return head;
-}
 
-int main(void){
-    FILE *fd = fopen(OUTFILE, "w");
+    // Null terminate the result string
+    result[result_size] = '\0';
 
-    if(!fd){
-        fprintf(stderr, "Error opening %s", OUTFILE);
-    }
-
-    char phrase[] = "Hello";
-
-    CharacterList* morseCodeHead = phraseToTranslate(phrase);
-
-    while(morseCodeHead != NULL){
-        char* code = morseCodeHead->morseCodeTranslation;
-        fputs(code, fd);
-        fputs(" / ", fd);
-        morseCodeHead = morseCodeHead->next;
-    }
-
-    fclose(fd);
-    freeMorseCodeList(morseCodeHead);
-}
-
-void test(){
-    printf("Hello World!\n");
+    return result;
 }

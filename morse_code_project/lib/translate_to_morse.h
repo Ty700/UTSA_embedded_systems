@@ -19,7 +19,6 @@ typedef struct CharacterList {
     //CharacterList* prev; //Do I want to be able to traverse it backwards? Idfk
 } CharacterList;
 
-extern CharacterList* phraseToTranslate(uint8_t* phrase);
-extern void test();
+extern uint8_t* phraseToTranslate(uint8_t* phrase);
 
 #endif /*TRANSLATE_TO_MORSE_H*/

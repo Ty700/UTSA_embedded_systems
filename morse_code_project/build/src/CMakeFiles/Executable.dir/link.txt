@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/Executable.dir/main.c.o -o ../../bin/Executable  ../lib/libTRANSLIB.a 
