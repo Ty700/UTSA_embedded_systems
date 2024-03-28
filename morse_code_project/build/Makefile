@@ -142,19 +142,6 @@ Executable/fast:
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/Executable.dir/build.make src/CMakeFiles/Executable.dir/build
 .PHONY : Executable/fast
 
-#=============================================================================
-# Target rules for targets named test
-
-# Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
-.PHONY : test
-
-# fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f unity/CMakeFiles/test.dir/build.make unity/CMakeFiles/test.dir/build
-.PHONY : test/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -165,7 +152,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Executable"
 	@echo "... TRANSLIB"
-	@echo "... test"
 .PHONY : help
 
 

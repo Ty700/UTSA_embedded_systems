@@ -199,7 +199,7 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Enable Test Compilations
-COMPILE_TEST:BOOL=ON
+COMPILE_TEST:BOOL=OFF
 
 //Value Computed by CMake
 CProjectTemplate_BINARY_DIR:STATIC=/home/tyler/UTSA/Embedded_Systems/morse_code_project/build
@@ -211,7 +211,7 @@ CProjectTemplate_IS_TOP_LEVEL:STATIC=ON
 CProjectTemplate_SOURCE_DIR:STATIC=/home/tyler/UTSA/Embedded_Systems/morse_code_project
 
 //Enable Morse Code Debugging
-DEBUG:BOOL=ON
+DEBUG:BOOL=OFF
 
 
 ########################
@@ -302,7 +302,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

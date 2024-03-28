@@ -237,7 +237,8 @@ static int32_t freeMorseCodeList(CharacterList* tail){
 *    -A phrase from phraseToTranslate
 *
 * @RETURNS:
-*    Head of a linked-list => For when phrase passed is valid
+*   Head of a linked-list => For when phrase passed is valid
+*   NULL => Either Memory alloc or hash error
 */
 
 static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
