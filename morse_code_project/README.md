@@ -8,7 +8,7 @@ make clean      <= Cleans project
 
 make prepare    <= Version without test or debug statements
 make verbose    <= Version with debug statements
-make test    <= Verbose version + Unity tests
+make test       <= Verbose version + Unity tests
 
 make run        <= Runs project. This depends on which version you made.
 ```
