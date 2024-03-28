@@ -4,7 +4,7 @@
 #include "translate_to_morse.h"
 
 int main(){
-    char text[] = "Hello World!";
+    char text[] = "hElLo";
 
     uint8_t* morseCodePhrase = phraseToTranslate(text);
 

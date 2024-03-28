@@ -16,7 +16,7 @@ typedef struct CharacterList {
     uint8_t character;
     uint8_t* morseCodeTranslation;
     struct CharacterList* next;
-    //CharacterList* prev; //Do I want to be able to traverse it backwards? Idfk
+    struct CharacterList* prev; 
 } CharacterList;
 
 extern uint8_t* phraseToTranslate(uint8_t* phrase);

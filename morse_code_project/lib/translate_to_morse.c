@@ -9,7 +9,7 @@
 * isAlphaNumberic -> Determines if a character is in the English alphabet or a number 0-9
 *
 * @INPUTS:
-*   A character... dyh
+*   A character... duh
 *
 * @RETURNS:
 *   1: Character is in the alphabet | a number
@@ -98,10 +98,9 @@ static uint8_t characterToIndexHash(const uint8_t* c){
 *    A character... any character.  
 *
 * @RETURNS:
-*    50                  => Non-valid characters | Hashing Error
-*                           -stderr will tell user which it is
-*   
-*    Non-empty string   => For when character passed is a valid character
+*    NULL => Non-valid characters | Hashing Error   
+*    Non-empty string => For when character passed is a valid character
+*    Original character ptr => For when character passed is not a valid character
 */
 
 static uint8_t* charToTranslate(uint8_t* c){
@@ -184,87 +183,189 @@ static uint8_t* charToTranslate(uint8_t* c){
     return morseCode[characterIndex];
 }
 
-CharacterList* createNewCharacterNode(){
+/*
+* createNewCharacterNode() -> Creates a new node for the list
+* 
+* @INPUTS:
+*    VOID
+*
+* @RETURNS:
+*   NULL => Memory error
+*   ptr to node => Successful
+*/
+CharacterList* createNewCharacterNode(void){
     CharacterList* new_node = calloc(1, sizeof(*new_node));
 
     if(!new_node){
-        fprintf(stderr, "Error: Couldn't calloc memory for new_node.\n");
+        fprintf(stderr, "Memory allocation for new_node.\n");
+        return NULL;
     }
-
+    
     return new_node; 
 }
 
-void freeMorseCodeList(CharacterList* head){
-    if(head == NULL){
+/*
+* freeMorseCodeList() -> Frees a given list TAIL
+* 
+* @INPUTS:
+*    -A linked-list TAIL
+*
+* @RETURNS:
+*   1 => Passed a NULL pointer
+*   0 => Successful
+*/
+static int32_t freeMorseCodeList(CharacterList* tail){
+    if(tail == NULL){
         fprintf(stderr, "You passed a NULL head. RIP.\n");
-        return;
+        return 1;
     }
 
-    while(head != NULL){
-        CharacterList* delete = head;
-        head = head->next;
-        free(delete);
+    while(tail != NULL){
+        CharacterList* toDelete = tail;
+        tail = tail->prev;
+        free(toDelete);
     }
+
+    return 0;
+}
+
+
+/*
+* phraseToTranslateHelper() -> Translates a phrase to morse code
+* 
+* @INPUTS:
+*    -A phrase from phraseToTranslate
+*
+* @RETURNS:
+*    Head of a linked-list => For when phrase passed is valid
+*/
+
+static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
+    CharacterList* head = NULL;
+    CharacterList* current = NULL;
+
+    while(*phrase != '\0'){
+        debug("CURRENT PHRASE: %c\n", *phrase);
+
+        CharacterList* new_character = createNewCharacterNode();
+        
+        /* Recursive NULL check BECAUSE C DOESN'T SUPPORT EXECEPTIONS FOR SOME REASON */
+        if(!new_character){
+            return NULL;
+        }
+
+        new_character->character = *phrase;
+
+        uint8_t* characterInMorse = charToTranslate(phrase);
+
+        /* ANOTHER RECURSIVE NULL RETURN FOR HASHING */
+        if(!characterInMorse){
+            return NULL;
+        }
+
+        new_character->morseCodeTranslation = characterInMorse;
+
+        if(head == NULL){
+            head = new_character;
+            head->prev = NULL;
+            current = new_character;
+        } else {
+            current->next = new_character;
+            new_character->prev = current;
+            current = current->next;
+        }
+        
+        phrase++;
+    }
+    return head;
 }
 
 /*
 * phraseToTranslate() -> Translates a phrase to morse code
 * 
 * @INPUTS:
-*    -A phrase
+*    -A phrase from main
 *
 * @RETURNS:
-*    NULL => Phrase containts non-valid characters
-*
+*    NULL => Phrase contains non-valid characters
 *    Non-empty string   => For when phrase passed is valid
 * 
-* Designing this so each character is a node in a linked list.
-*   Why? Because I don't want to have a buffer limit (capping the phrase character limit)... bad idea? Probably. Esp for a small milk boy.
+*   Designing this so each character is a node in a linked list.
+*   Why? Because I thought the project was too eas- fun!
+*   I wanted to get around the buffer limit really.
+*   But there are other ways of doing this? Yeah... but do they involve linked lists?
+*   Yes? Well, shut up okay.
 */
 
-// Modify the function signature to return a string instead of a linked list
-extern uint8_t* phraseToTranslate(uint8_t* phrase) {
-    // Count the number of characters in the phrase
-    uint32_t phrase_length = 0;
-    while (phrase[phrase_length] != '\0') {
-        phrase_length++;
+extern uint8_t* phraseToTranslate(uint8_t* phrase){
+    //Counts phrase length
+    uint32_t phraseLength = 0;
+    
+    while(phrase[phraseLength] != '\0'){
+            phraseLength += 1;
     }
 
-    // Calculate the maximum possible size needed for the resulting Morse code translation
-    uint32_t max_result_size = phrase_length * 5; // Maximum 5 Morse code characters per English character
-    uint32_t result_size = 0;
+    if(!phraseLength){
+        debug("Passed empty string.\n");
+        return "";
+    }
 
-    // Allocate memory for the resulting Morse code translation
-    uint8_t* result = calloc(max_result_size + 1, sizeof(uint8_t)); // +1 for null terminator
-    if (result == NULL) {
-        fprintf(stderr, "Error: Memory allocation failed for Morse translation.\n");
+    CharacterList* head = phraseToTranslateHelper(phrase);
+
+    /* Recursive NULL check BECAUSE C DOESN'T SUPPORT EXCEPTIONS FOR SOME REASON */
+    if(!head){
+        //Either hashing or mem allocation. stderr will display which
         return NULL;
     }
 
-    // Concatenate the Morse code translations of each character into the result string
-    uint8_t* result_ptr = result;
+    debug("Phrase Length: %d\n", phraseLength);
 
-    while (*phrase != '\0') {
-        uint8_t* morse_translation = charToTranslate(phrase);
-        
-        if (morse_translation != NULL) {
-            // Copy Morse code translation to the result string
-            uint32_t morse_length = 0;
-            
-            while (morse_translation[morse_length] != '\0') {
-                result_ptr[result_size++] = morse_translation[morse_length++];
-            }
+    phraseLength *= 5; /* Worse case is each character is a number */
+    phraseLength += 1; /* For the NULL */
 
-            // Add space between characters except for the last one
-            if (*(phrase + 1) != '\0') {
-                result_ptr[result_size++] = ' ';
-            }
-        }
-        phrase++;
+    //Allocate memory for what we will be returning
+    uint8_t* ret = calloc(phraseLength, sizeof(*ret));
+    uint32_t retSize = 0;
+
+    if(!ret){
+        fprintf(stderr, "Error: Memory alloc for ret.\n");
+        return NULL;
     }
 
-    // Null terminate the result string
-    result[result_size] = '\0';
+    //Iterate through each node
+    while(1){    
 
-    return result;
+        /* If not a hashing error */
+        if(head->morseCodeTranslation != NULL){
+            /* Tracks current dit, dot, or */
+            uint32_t currentMorseLength = 0;
+
+            /* Copy the dit, dot, or / to the returning string */
+            while(head->morseCodeTranslation[currentMorseLength] != '\0'){
+                ret[retSize++] = head->morseCodeTranslation[currentMorseLength++];
+            }
+
+            /* Add a space between each morse code word */
+            ret[retSize++] = ' ';
+        } else {
+            return "";
+        }
+        if(head->next == NULL){
+            break;
+        } else {
+            head = head->next;
+        }
+    }
+
+    /* Null terminate */
+    ret[retSize - 1] = '\0'; 
+
+    /* Free them resources. Hope this doesn't return anything*/
+    if(freeMorseCodeList(head)){
+        fprintf(stderr, "Error: Free.\n");
+    }
+
+    /* Return string */
+    return ret;
+
 }
