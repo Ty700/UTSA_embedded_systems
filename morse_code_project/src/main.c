@@ -6,17 +6,19 @@
 #include "cv1800b.h"
 #include "blink_led.h"
 
-void setup(){
-    set_gpio_mode();
+// void setup(){
+//     set_gpio_mode();
 
-    volatile unsigned* swporta_dr_value = &GPIO2->SWPORTA_DR;
-}
+//     volatile unsigned* swporta_dr_value = &GPIO2->SWPORTA_DR;
+// }
 
 int main(){
 
     char text[] = "hElLo";
 
     uint8_t* morseCodePhrase = phraseToTranslate(text);
+
+    debug("Phrase in main: %s", morseCodePhrase);
 
     blink_led(morseCodePhrase);
     return 0;

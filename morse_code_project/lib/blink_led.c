@@ -1,6 +1,7 @@
 #include "cv1800b.h"
 #include "devmem.h"
 #include "blink_led.h"
+#include "translate_to_morse.h"
 
 #include <stdint.h>
 #include <stdio.h>
