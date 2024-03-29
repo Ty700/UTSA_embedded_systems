@@ -2,22 +2,58 @@
 
 This project involves creating a Morse code translator in C that controls an LED on the Milk-V Duo to blink Morse code representations of text inputs. The objective is to blend software development with hands-on hardware interaction, focusing on embedded systems programming, C language, and unit testing using Unity.
 
-#### How to:
-``` 
-BUILD FOR HOST MACHINE:
+### How to build a binary
 
-python3 hostBuild.py make clean         <= Cleans host project
+```
+USAGE:
 
-python3 hostBuild.py make prepare       <= Builds and runs host project WITHOUT UNIT TESTS OR DEBUG STATEMENTS
-python3 hostBuild.py make verbose       <= Prepare + DEBUG STATEMENTS.
+ ./build.py -<ARGUMENT>
+   Example:
+       ./build.py -h <= Builds a binary that will run on host machine without debug statements nor runs unit tests
+       ./build.py -c <= Will remove the binary (and cmake build) created by ./build.py -h
 
-python3 hostBuild.py make test          <= Builds and runs host project WITH UNIT TESTS AND WITHOUT DEBUG STATMENTS
-python3 hostBuild.py make verbose_test  <= test + DEBUG STATEMENTS
+    Important Notes:
+        - Only one argument is allowed.
+        - Building for host also runs the binary.
+        - You can find the built binary in /bin/
 
-BUILD FOR TARGET (run each cmd):
+ ARGUEMENTS:
 
-python3 targetBuild.py cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/app/milkv_duo.cmake ..
-python3 targetBuild.py cmake --build .
+    CLEANING:
 
+       -c
+           Feature:
+               [X] Removes all binaries
+               [X] Removes build directory
+ 
+    BUILDING FOR HOST:
+
+       Features for all options:
+            [X] x86 binary       
+
+       -p 
+           Features: 
+                [ ] Unit Tests
+                [ ] Debug Statements
+       -d
+           Features: 
+                [ ] Unit Tests
+                [X] Debug Statements
+
+       -u
+           Features: 
+                [X] Unit Tests
+                [ ] Debug Statements
+       -v
+           Features: 
+                [X] Unit Tests
+                [X] Debug Statements
+   
+    BUILDING FOR TARGET:
+
+        -t
+            Features:
+                [ ] A cookie
+                [X] A working RISC-V binary for MILK (maybe)
 ```
 

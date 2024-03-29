@@ -18,8 +18,9 @@ int main(){
 
     uint8_t* morseCodePhrase = phraseToTranslate(text);
 
-    debug("Phrase in main: %s", morseCodePhrase);
-
+    /* Spaced over to match with debug in blink_led*/
+    debug("Phrase in main:     %s\n", morseCodePhrase);
+    
     blink_led(morseCodePhrase);
     return 0;
 }
