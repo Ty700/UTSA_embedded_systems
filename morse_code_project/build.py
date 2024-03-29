@@ -16,7 +16,7 @@
 #       Features for all options:
 #           [X] x86 binary       
 #
-#       -p 
+#       -r
 #           Features: 
 #               [ ] Unit Tests
 #               [ ] Debug Statements
@@ -92,8 +92,8 @@ def ensure_build_directory():
 #rebuilds build every time
 subprocess.run(["sudo", "rm", "-rf", "build/"])
 
-#PREPARE VERSION
-if(sys.argv[1] == '-p' or sys.argv[1] == '-p'):
+#PRODUCTION VERSION
+if(sys.argv[1] == '-p' or sys.argv[1] == '-P'):
     ensure_build_directory()
     current_directory = os.getcwd()
     os.chdir(f"{current_directory}/build")
@@ -121,7 +121,7 @@ elif(sys.argv[1] == '-c' or sys.argv[1] == '-C'):
 
     sys.exit()
 
-#PREPARE + DEBUG VERSION
+#DEBUG VERSION
 elif(sys.argv[1] == "-d" or sys.argv[1] == "-D"):
     ensure_build_directory()
     

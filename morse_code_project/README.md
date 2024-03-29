@@ -9,7 +9,7 @@ USAGE:
 
  ./build.py -<ARGUMENT>
    Example:
-       ./build.py -h <= Builds a binary that will run on host machine without debug statements nor runs unit tests
+       ./build.py -p <= Builds a binary that will run on host machine without debug statements nor runs unit tests
        ./build.py -c <= Will remove the binary (and cmake build) created by ./build.py -h
 
     Important Notes:
@@ -28,9 +28,8 @@ USAGE:
  
     BUILDING FOR HOST:
 
-       Features for all options:
+       Features for HOST options:
             [X] x86 binary       
-
        -p 
            Features: 
                 [ ] Unit Tests
@@ -39,7 +38,6 @@ USAGE:
            Features: 
                 [ ] Unit Tests
                 [X] Debug Statements
-
        -u
            Features: 
                 [X] Unit Tests
