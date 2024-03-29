@@ -168,19 +168,19 @@ static uint8_t* charToTranslate(uint8_t* c){
 
     debug("   After: %c\n", *c);
 
-    uint8_t characterIndex = characterToIndexHash(c);
+    uint8_t character_index = characterToIndexHash(c);
 
-    debug("   %c index in morseCode: %d\n", *c, characterIndex);
+    debug("   %c index in morseCode: %d\n", *c, character_index);
 
-    debug("   %c in morse code: %s\n", *c, morseCode[characterIndex]);
+    debug("   %c in morse code: %s\n", *c, morseCode[character_index]);
 
     //Error check
-    if(characterIndex == HASH_ERROR){
+    if(character_index == HASH_ERROR){
         fprintf(stderr, "Error hashing character.\n");
         return NULL; 
     }
 
-    return morseCode[characterIndex];
+    return morseCode[character_index];
 }
 
 /*
@@ -221,9 +221,9 @@ static int32_t freeMorseCodeList(CharacterList* tail){
     }
 
     while(tail != NULL){
-        CharacterList* toDelete = tail;
+        CharacterList* delete = tail;
         tail = tail->prev;
-        free(toDelete);
+        free(delete);
     }
 
     return 0;
@@ -257,14 +257,14 @@ static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
 
         new_character->character = *phrase;
 
-        uint8_t* characterInMorse = charToTranslate(phrase);
+        uint8_t* character_in_morse = charToTranslate(phrase);
 
         /* ANOTHER RECURSIVE NULL RETURN FOR HASHING */
-        if(!characterInMorse){
+        if(!character_in_morse){
             return NULL;
         }
 
-        new_character->morseCodeTranslation = characterInMorse;
+        new_character->morse_translation = character_in_morse;
 
         if(head == NULL){
             head = new_character;
@@ -300,13 +300,13 @@ static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
 
 extern uint8_t* phraseToTranslate(uint8_t* phrase){
     //Counts phrase length
-    uint32_t phraseLength = 0;
+    uint32_t phrase_length = 0;
     
-    while(phrase[phraseLength] != '\0'){
-            phraseLength += 1;
+    while(phrase[phrase_length] != '\0'){
+            phrase_length += 1;
     }
 
-    if(!phraseLength){
+    if(!phrase_length){
         debug("Passed empty string.\n");
         return "";
     }
@@ -319,14 +319,14 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
         return NULL;
     }
 
-    debug("Phrase Length: %d\n", phraseLength);
+    debug("Phrase Length: %d\n", phrase_length);
 
-    phraseLength *= 5; /* Worse case is each character is a number */
-    phraseLength += 1; /* For the NULL */
+    phrase_length *= 5; /* Worse case is each character is a number */
+    phrase_length += 1; /* For the NULL */
 
     //Allocate memory for what we will be returning
-    uint8_t* ret = calloc(phraseLength, sizeof(*ret));
-    uint32_t retSize = 0;
+    uint8_t* ret = calloc(phrase_length, sizeof(*ret));
+    uint32_t ret_size = 0;
 
     if(!ret){
         fprintf(stderr, "Error: Memory alloc for ret.\n");
@@ -337,17 +337,17 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
     while(1){    
 
         /* If not a hashing error */
-        if(head->morseCodeTranslation != NULL){
+        if(head->morse_translation != NULL){
             /* Tracks current dit, dot, or */
-            uint32_t currentMorseLength = 0;
+            uint32_t cur_morse_len = 0;
 
             /* Copy the dit, dot, or / to the returning string */
-            while(head->morseCodeTranslation[currentMorseLength] != '\0'){
-                ret[retSize++] = head->morseCodeTranslation[currentMorseLength++];
+            while(head->morse_translation[cur_morse_len] != '\0'){
+                ret[ret_size++] = head->morse_translation[cur_morse_len++];
             }
 
             /* Add a space between each morse code word */
-            ret[retSize++] = ' ';
+            ret[ret_size++] = ' ';
         } else {
             return "";
         }
@@ -359,7 +359,7 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
     }
 
     /* Null terminate */
-    ret[retSize - 1] = '\0'; 
+    ret[ret_size - 1] = '\0'; 
 
     /* Free them resources. Hope this doesn't return anything*/
     if(freeMorseCodeList(head)){

@@ -62,6 +62,15 @@ void handle_sigint(int sig)
 }
 
 extern void blink_led(uint8_t* code){
+#ifdef MORSE_DEBUG
+    fprintf(stdout, "Blink_led recieved: ");
+    uint32_t codeLength = 0;
+    while(code[codeLength] != '\0'){
+        printf("%c", code[codeLength]);
+        codeLength += 1;
+    }
+    printf("\n");
+#endif
     /* 
         Will do the following:
             Go through each morse code character
@@ -79,14 +88,51 @@ extern void blink_led(uint8_t* code){
                 (this will probably in main though not sure yet)
     */
 
-#ifdef MORSE_DEBUG
-    fprintf(stdout, "Blink_led recieved: ");
-    uint32_t codeLength = 0;
-    while(code[codeLength] != '\0'){
-        printf("%c", code[codeLength]);
-        codeLength += 1;
-    }
-    printf("\n");
-#endif
+    uint32_t time_unit_count = 0;
 
+    while(*code != '\0'){
+        switch(*code){
+            case('.'):
+                //blink logic
+                debug("ON: 1 Time Unit\n");
+                time_unit_count += 1;
+                
+                if(*(code + 1) == ' ' || *(code + 1) == '\0'){
+                    break;
+                }
+
+                debug("OFF: 1 Time Unit\n");
+                time_unit_count += 1;
+                break;
+            case('-'):
+                debug("ON: 3 Time Unit\n");
+                time_unit_count += 3;
+                
+                if(*(code + 1) == ' ' || *(code + 1) == '\0'){
+                    break;
+                }
+                
+                debug("OFF: 1 Time Unit\n");
+                time_unit_count += 1;
+                break;
+            case('/'):
+                if(*(code + 1) == '\0'){
+                    break;
+                }
+                debug("WORD SPACE: 7 Time Unit\n");
+                time_unit_count += 7;
+                break;
+            case(' '):
+                if(*(code + 1) == '/' || *(code - 1) == '/' || *(code + 1) == '\0'){
+                    break;
+                }
+                debug("LETTER SPACE: 3 Time Unit\n");
+                time_unit_count += 3;
+                break;
+            default:
+                break;
+        }
+        code++;
+    }
+    printf("Total Time Units: %d\n", time_unit_count);
 }

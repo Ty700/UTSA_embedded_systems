@@ -14,7 +14,7 @@
 
 typedef struct CharacterList {
     uint8_t character;
-    uint8_t* morseCodeTranslation;
+    uint8_t* morse_translation;
     struct CharacterList* next;
     struct CharacterList* prev; 
 } CharacterList;

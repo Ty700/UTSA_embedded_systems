@@ -14,13 +14,13 @@
 
 int main(){
 
-    char text[] = "hElLo";
+    char text[] = "SOS";
 
-    uint8_t* morseCodePhrase = phraseToTranslate(text);
+    uint8_t* translation = phraseToTranslate(text);
 
     /* Spaced over to match with debug in blink_led*/
-    debug("Phrase in main:     %s\n", morseCodePhrase);
+    debug("Phrase in main:     %s\n", translation);
     
-    blink_led(morseCodePhrase);
+    blink_led(translation);
     return 0;
 }
