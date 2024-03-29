@@ -61,7 +61,20 @@ void handle_sigint(int sig)
     exit(0);
 }
 
-extern void blink_led(uint8_t* code){
+/*
+* blink_led() -> Translates a phrase to morse code
+* 
+* @INPUTS:
+*    - Morse Code char array
+*
+* @RETURNS:
+*    uint32_t => For Unit Testing
+*
+*
+*   TODO: ADD IRQ FOR NEW ENGLISH PHRASE???
+*/
+
+extern uint32_t blink_led(uint8_t* code){
 #ifdef MORSE_DEBUG
     fprintf(stdout, "Blink_led recieved: ");
     uint32_t codeLength = 0;
@@ -71,27 +84,13 @@ extern void blink_led(uint8_t* code){
     }
     printf("\n");
 #endif
-    /* 
-        Will do the following:
-            Go through each morse code character
-            switch(chraracter)
-                if dit
-                    preform dit light up logic
-                if dot
-                    preform dot light up logic
-                if /
-                    preform space light up logic
-
-            Will have an IRQ for new phrases
-                if new phrase, rerun morse code translation
-                return here to preform blink logic
-                (this will probably in main though not sure yet)
-    */
 
     uint32_t time_unit_count = 0;
 
     while(*code != '\0'){
+        
         switch(*code){
+            
             case('.'):
                 //blink logic
                 debug("ON: 1 Time Unit\n");
@@ -104,6 +103,7 @@ extern void blink_led(uint8_t* code){
                 debug("OFF: 1 Time Unit\n");
                 time_unit_count += 1;
                 break;
+
             case('-'):
                 debug("ON: 3 Time Unit\n");
                 time_unit_count += 3;
@@ -115,6 +115,7 @@ extern void blink_led(uint8_t* code){
                 debug("OFF: 1 Time Unit\n");
                 time_unit_count += 1;
                 break;
+
             case('/'):
                 if(*(code + 1) == '\0'){
                     break;
@@ -122,6 +123,7 @@ extern void blink_led(uint8_t* code){
                 debug("WORD SPACE: 7 Time Unit\n");
                 time_unit_count += 7;
                 break;
+
             case(' '):
                 if(*(code + 1) == '/' || *(code - 1) == '/' || *(code + 1) == '\0'){
                     break;
@@ -129,6 +131,7 @@ extern void blink_led(uint8_t* code){
                 debug("LETTER SPACE: 3 Time Unit\n");
                 time_unit_count += 3;
                 break;
+
             default:
                 break;
         }
