@@ -6,10 +6,13 @@ This project involves creating a Morse code translator in C that controls an LED
 ``` 
 FOR HOST MACHINE:
 
-python3 hostBuild.py make clean     <= Cleans host project
-python3 hostBuild.py make prepare   <= Builds and runs host project w/out Unit test and Debug statements 
-python3 hostBuild.py make verbose   <= Builds and runs host project with Debug statements and w/out Unit test
-python3 hostBuild.py make test      <= Builds and runs host project with Unit test and Debug statements 
+python3 hostBuild.py make clean         <= Cleans host project
+
+python3 hostBuild.py make prepare       <= Builds and runs host project WITHOUT UNIT TESTS OR DEBUG STATEMENTS
+python3 hostBuild.py make verbose       <= Prepare + DEBUG STATEMENTS.
+
+python3 hostBuild.py make test          <= Builds and runs host project WITH UNIT TESTS AND WITHOUT DEBUG STATMENTS
+python3 hostBuild.py make verbose_test  <= test + DEBUG STATEMENTS
 
 FOR TARGET (run each cmd):
 

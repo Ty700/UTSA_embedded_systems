@@ -48,6 +48,15 @@ def test():
     ensure_build_directory()
     current_directory = os.getcwd()
     os.chdir(f"{current_directory}/build")
+    subprocess.run(["cmake", "..", "-DCOMPILE_TEST=ON"])
+    subprocess.run(["cmake", "--build", "."])
+    os.chdir("../bin")
+    subprocess.run(["./test"])
+
+def verbose_test():
+    ensure_build_directory()
+    current_directory = os.getcwd()
+    os.chdir(f"{current_directory}/build")
     subprocess.run(["cmake", "..", "-DCOMPILE_TEST=ON", "-DDEBUG=ON"])
     subprocess.run(["cmake", "--build", "."])
     os.chdir("../bin")
@@ -63,5 +72,7 @@ if __name__ == "__main__":
         verbose()
     elif(sys.argv[2] == "test"):
         test()
+    elif(sys.argv[2] == "verbose_test"):
+        verbose_test()
     else:
-        print("Usage Error: python3 hostBuild.py make <clean | prepare | verbose | test>")
+        print("Usage Error: python3 hostBuild.py make <clean | prepare | verbose | test | verbose_test>")
