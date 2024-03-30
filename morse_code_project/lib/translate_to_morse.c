@@ -98,7 +98,7 @@ static uint8_t characterToIndexHash(const uint8_t* c){
 *    A character... any character.  
 *
 * @RETURNS:
-*    NULL => Non-valid characters | Hashing Error   
+*    NULL => Hashing Error   
 *    Non-empty string => For when character passed is a valid character
 *    Empty String => For when character passed is not a valid character
 */
@@ -288,7 +288,7 @@ static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
 *    -A phrase from main
 *
 * @RETURNS:
-*    NULL => Phrase contains non-valid characters
+*    NULL => Hashing Error | Memory Alloc err
 *    Non-empty string   => For when phrase passed is valid
 * 
 *   Designing this so each character is a node in a linked list.
@@ -349,6 +349,7 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
             /* 
             * Omits all beginning spaces
             */
+
             if(head->character == ' ' && !seen_first_alpha){
                 goto next;
             } else {
@@ -363,7 +364,7 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
                 uint32_t only_spaces = 0;
                 
                 CharacterList* trav = head;
-
+                /* Once we come across a space, see if there is only spaces left. */
                 while(trav != NULL){
                     if(trav->character != ' '){
                         only_spaces = 1;
@@ -374,6 +375,7 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
                 }
 
                 if(!only_spaces){
+                    /* A goto? *shivers* */
                     goto next;
                 }
             }
