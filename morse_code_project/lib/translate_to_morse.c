@@ -59,7 +59,7 @@ static void toLowercase(uint8_t* c){
 *
 * @RETURNS:
 *   HASH_ERROR => Default 254. Hashing error.
-*   An int between 0 and 36 that corresponds with the character's morse code index in the array.
+*   An int between 0 and 35 that corresponds with the character's morse code index in the array.
 *
 *
 * TODO:

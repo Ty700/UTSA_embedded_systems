@@ -59,12 +59,16 @@ USAGE:
                 [X] Debug Statements
    
     BUILDING FOR TARGET:
-
+        
+        Notes: 
+            - The text char array in src/main.c will be the message that is blinked out in Morse code.
+            - Can not unit tests on target for obvious reasons. Those are mainly to test morse code logic.
+            
         -t <= "Target"
             Features:
                 [ ] A cookie (Ran out)
                 [X] A working RISC-V binary for MILK
-        
+            
         -td <= "Target Debug"
             Features:
                 [X] A working RISC-V binary for MILK 

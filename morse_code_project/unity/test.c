@@ -9,6 +9,7 @@ void setUp() {
 void tearDown() {  
 }
 
+/* Alphabet only test */
 void test_AlphabeticInput(void) {
     uint8_t phrase[] = "Hello";
     uint8_t* output = phraseToTranslate(phrase);
@@ -18,7 +19,7 @@ void test_AlphabeticInput(void) {
     TEST_ASSERT_EQUAL_STRING(expected, output);
 }
 
-// Test function for numeric input
+/* Test function for numeric input */
 void test_NumericInput(void) {
     uint8_t phrase[] = "123";
     uint8_t* output = phraseToTranslate(phrase);
@@ -29,7 +30,7 @@ void test_NumericInput(void) {
     TEST_ASSERT_EQUAL_STRING(expected, output);
 }
 
-// Test function for mixed alphanumeric input
+/* Test function for mixed alphanumeric input */
 void test_MixedAlphanumericInput(void)
 {
     uint8_t phrase[] = "abc123";
@@ -41,29 +42,27 @@ void test_MixedAlphanumericInput(void)
     TEST_ASSERT_EQUAL_STRING(expected, output);
 }
 
-// Test function for mixed case input
+/* Test function for mixed case input */
 void test_MixedCaseAlphanumericInput(void) {
     uint8_t phrase[] = "AbC123";
     uint8_t* output = phraseToTranslate(phrase);
 
-    // AbC123
     char *expected = ".- -... -.-. .---- ..--- ...--";
 
     TEST_ASSERT_EQUAL_STRING(expected, output);
 }
 
-// Test function for words with spaces
+/* Test function for words with spaces */
 void test_CanHandleSpaces(void) {   
     uint8_t phrase[] = "Hello World";
     uint8_t* output = phraseToTranslate(phrase);
 
-    // Hello World
     char *expected = ".... . .-.. .-.. --- / .-- --- .-. .-.. -..";
 
     TEST_ASSERT_EQUAL_STRING(expected, output);
 }
 
-// Test function for non-representable binary data
+/* Test function for non-representable binary data */
 void test_NonRepresentableBinaryData(void) {
     uint8_t phrase[] = {0x00, 0xFF, 0x55, 0x7F}; // Example binary data
     uint8_t* output = phraseToTranslate(phrase);
@@ -89,6 +88,17 @@ void test_MorseTiming(void) {
     // Assert the total duration of delays
     TEST_ASSERT_EQUAL(expected_delay_time, sleep_stats[1]);
 }
+
+/*****************************
+ * 
+ * Decided to make multiple edge case tests.
+ * 
+ * Might have missed some possibilites for edge cases.
+ * 
+ * If so lmk and I can add them
+ * 
+ * ***************************
+*/
 
 void test_AlphabetEdgeCase(void){
 

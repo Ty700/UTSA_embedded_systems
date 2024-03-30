@@ -8,7 +8,10 @@
 
 int main(){
 
-    char text[] = "HEKASFASGIOAGNJIOASJGOIAJGIOAJVAIOSGJGOIAJGIOAJAIGOJ";
+    /* When built for target, this text's morse code translation will be blinked out */
+    char text[] = "SOS";
+
+    printf("Blinking %s in Morse code\n", text);
 
     uint8_t* translation = phraseToTranslate(text);
 
