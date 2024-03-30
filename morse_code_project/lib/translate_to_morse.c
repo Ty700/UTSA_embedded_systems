@@ -247,7 +247,7 @@ static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
     CharacterList* current = NULL;
 
     while(*phrase != '\0'){
-        debug("CURRENT PHRASE: %c\n", *phrase);
+        debug("\nCURRENT PHRASE: %c\n", *phrase);
 
         CharacterList* new_character = createNewCharacterNode();
         
@@ -263,6 +263,7 @@ static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
             return NULL;
         }
 
+        new_character->character = *phrase;
         new_character->morse_translation = character_in_morse;
 
         if(head == NULL){
@@ -318,11 +319,14 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
         return NULL;
     }
 
-    debug("Phrase Length: %d\n", phrase_length);
+    debug("\nEnglish Phrase Length: %d\n", phrase_length);
 
+    uint32_t amount_of_spaces = phrase_length;
     phrase_length *= 5; /* Worse case is each character is a number */
+    phrase_length += amount_of_spaces * 3; /* Extra amount needed for spaces */
     phrase_length += 1; /* For the NULL */
 
+    debug("Allocating %d characters for max morse code length.\n", phrase_length);
     //Allocate memory for what we will be returning
     uint8_t* ret = calloc(phrase_length, sizeof(*ret));
     uint32_t ret_size = 0;
@@ -333,12 +337,46 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
     }
 
     //Iterate through each node
-    while(1){    
+    uint32_t seen_first_alpha = 0;
 
+    while(1){    
+        
         /* If not a hashing error */
         if(head->morse_translation != NULL){
             /* Tracks current dit, dot, or */
             uint32_t cur_morse_len = 0;
+
+            /* 
+            * Omits all beginning spaces
+            */
+            if(head->character == ' ' && !seen_first_alpha){
+                goto next;
+            } else {
+                seen_first_alpha = 1;
+            }
+            
+            /*
+            *   Omits all ending spaces
+            */
+
+            if(head->character == ' '){
+                uint32_t only_spaces = 0;
+                
+                CharacterList* trav = head;
+
+                while(trav != NULL){
+                    if(trav->character != ' '){
+                        only_spaces = 1;
+                        break;
+                    } else {
+                        trav = trav->next;
+                    }
+                }
+
+                if(!only_spaces){
+                    goto next;
+                }
+            }
 
             /* Copy the dit, dot, or / to the returning string */
             while(head->morse_translation[cur_morse_len] != '\0'){
@@ -350,15 +388,23 @@ extern uint8_t* phraseToTranslate(uint8_t* phrase){
         } else {
             return "";
         }
-        if(head->next == NULL){
-            break;
-        } else {
-            head = head->next;
-        }
+
+        next: 
+            if(head->next == NULL){
+                ret[ret_size - 1] = '\0';
+                break;
+            } else {
+                head = head->next;
+            }
     }
 
-    /* Null terminate */
-    ret[ret_size - 1] = '\0'; 
+    debug("Reallocing %d bytes -> %d bytes\n", phrase_length, ret_size - 1);
+
+    ret = realloc(ret, sizeof(*ret) * (ret_size - 1));
+
+    #ifdef MORSE_DEBUG
+        printf("Returning: %d characters.\n", ret_size);
+    #endif /* MORSE_DEBUG */
 
     /* Free them resources. Hope this doesn't return anything*/
     if(freeMorseCodeList(head)){

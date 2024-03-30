@@ -8,7 +8,7 @@
 
 int main(){
 
-    char text[] = "SOS";
+    char text[] = "HEKASFASGIOAGNJIOASJGOIAJGIOAJVAIOSGJGOIAJGIOAJAIGOJ";
 
     uint8_t* translation = phraseToTranslate(text);
 
