@@ -8,6 +8,7 @@ This project involves creating a Morse code translator in C that controls an LED
 USAGE:
 
  ./build.py -<ARGUMENT>
+
    Example:
        ./build.py -p <= Builds a binary that will run on host machine without debug statements nor runs unit tests
        ./build.py -c <= Will remove the binary (and cmake build) created by ./build.py -h
@@ -16,12 +17,15 @@ USAGE:
         - Only one argument is allowed.
         - Building for host also runs the binary.
         - You can find the built binary in /bin/
+    
+    Help:
+        ./build.py -h | --help
 
  ARGUEMENTS:
 
     CLEANING:
 
-       -c
+       -c  <= "Clean"
            Feature:
                [X] Removes all binaries
                [X] Removes build directory
@@ -30,28 +34,40 @@ USAGE:
 
        Features for HOST options:
             [X] x86 binary       
-       -p 
+       
+       -p  <= "Production"
            Features: 
                 [ ] Unit Tests
                 [ ] Debug Statements
-       -d
+            - Honestly only use this just to see if it will compile w/out error.
+            - Running this has no output since the output is blinking an LED
+            - Stuff is happening... ./build.py -d to see what is going on behind the scenes
+
+       -d  <= "Debug"
            Features: 
                 [ ] Unit Tests
                 [X] Debug Statements
-       -u
+
+       -u <= "Unit testing"
            Features: 
                 [X] Unit Tests
                 [ ] Debug Statements
-       -v
+
+       -v   <= "Verbose Unit test"
            Features: 
                 [X] Unit Tests
                 [X] Debug Statements
    
     BUILDING FOR TARGET:
 
-        -t
+        -t <= "Target"
             Features:
-                [ ] A cookie
-                [X] A working RISC-V binary for MILK (maybe)
+                [ ] A cookie (Ran out)
+                [X] A working RISC-V binary for MILK
+        
+        -td <= "Target Debug"
+            Features:
+                [X] A working RISC-V binary for MILK 
+                [X] Debug statements 
 ```
 

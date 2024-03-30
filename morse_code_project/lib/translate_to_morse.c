@@ -256,8 +256,6 @@ static CharacterList* phraseToTranslateHelper(uint8_t* phrase){
             return NULL;
         }
 
-        new_character->character = *phrase;
-
         uint8_t* character_in_morse = charToTranslate(phrase);
 
         /* ANOTHER RECURSIVE NULL RETURN FOR HASHING */

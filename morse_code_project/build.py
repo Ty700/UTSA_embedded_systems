@@ -215,7 +215,7 @@ elif(sys.argv[1] == "-td" or sys.argv[1] == "-TD"):
         f"{os.getcwd()}:/app",
         "-t", f"{image_name}", 
         "bash", "-c",
-        "cd build && cmake -DDEBUG=ON -DCOMPILE_TEST=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/app/milkv_duo.cmake ..",
+        "cd build && cmake -DDEBUG=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/app/milkv_duo.cmake ..",
     ]
 
     subprocess.run(build_command)

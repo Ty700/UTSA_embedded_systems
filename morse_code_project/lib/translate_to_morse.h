@@ -11,9 +11,7 @@
     #define debug(fmt,args...)
 #endif /* MORSE_DEBUG */
 
-
 typedef struct CharacterList {
-    uint8_t character;
     uint8_t* morse_translation;
     struct CharacterList* next;
     struct CharacterList* prev; 

@@ -84,12 +84,12 @@ static void dit_blink(volatile uint32_t* reg){
     
     /* ON */
     dev_mem_write((unsigned long)reg, HIGH);
-    debug("TURNING ON\n");
+    debug("\nTURNING ON\n");
     sleep(1);
 
     /* OFF */
     dev_mem_write((unsigned long)reg, LOW);
-    debug("TURNING OFF\n");
+    debug("\nTURNING OFF\n");
 }
 
 /*
@@ -154,7 +154,7 @@ extern void blink_led(uint8_t* code, uint32_t sleep_stats[]){
 
     while(*code != '\0'){
         
-        debug("Current Morse: %c\n", *code);
+        debug("\nCurrent Morse: %c\n", *code);
 
         switch(*code){
 
@@ -163,8 +163,6 @@ extern void blink_led(uint8_t* code, uint32_t sleep_stats[]){
                 debug("ON: 1 Time Unit\n");
                 sleep_stats[CALL_AMOUNT]++;
                 sleep_stats[SLEEP_SECONDS]++;
-
-                printf("SLEEPING\n");
 
                 #ifndef HOST
                     dit_blink(swporta_dr_value);
@@ -175,7 +173,11 @@ extern void blink_led(uint8_t* code, uint32_t sleep_stats[]){
                     break;
                 } else {
                     debug("OFF: 1 Time Unit\n");
-                    sleep(1);
+                    
+                    #ifndef HOST
+                        sleep(1);
+                    #endif /*HOST*/
+                    
                     sleep_stats[CALL_AMOUNT]++;
                     sleep_stats[SLEEP_SECONDS]++;
                 }
@@ -195,7 +197,11 @@ extern void blink_led(uint8_t* code, uint32_t sleep_stats[]){
                     break;
                 } else {
                     debug("OFF: 1 Time Unit\n");
-                    sleep(1);
+
+                    #ifndef HOST
+                        sleep(1);
+                    #endif /*HOST*/
+                    
                     sleep_stats[CALL_AMOUNT]++;
                     sleep_stats[SLEEP_SECONDS]++;
                 }
