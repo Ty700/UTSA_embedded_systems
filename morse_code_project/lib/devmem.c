@@ -51,7 +51,9 @@ void dev_munmap(void *virt_addr, int len)
 
     /* page align */
     addr = (((uintptr_t)virt_addr) & ~(sysconf(_SC_PAGE_SIZE) - 1));
+
     munmap((void *)addr, len + (uintptr_t)virt_addr - addr);
+    
     close(devmem_fd);
 }
 

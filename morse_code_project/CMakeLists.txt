@@ -11,8 +11,14 @@ option(DEBUG "Enable Morse Code Debugging" OFF)
 
 option(COMPILE_TEST "Enable Test Compilations" OFF)
 
+option(HOST "Running on Host" OFF)
+
 if(DEBUG)
     add_definitions(-DMORSE_DEBUG)
+endif()
+
+if(HOST)
+    add_definitions(-DHOST)
 endif()
 
 set(TRANSLATELIB TRANSLIB)

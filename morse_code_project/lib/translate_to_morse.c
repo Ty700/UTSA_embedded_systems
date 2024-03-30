@@ -100,7 +100,7 @@ static uint8_t characterToIndexHash(const uint8_t* c){
 * @RETURNS:
 *    NULL => Non-valid characters | Hashing Error   
 *    Non-empty string => For when character passed is a valid character
-*    Original character ptr => For when character passed is not a valid character
+*    Empty String => For when character passed is not a valid character
 */
 
 static uint8_t* charToTranslate(uint8_t* c){
@@ -158,7 +158,7 @@ static uint8_t* charToTranslate(uint8_t* c){
         
         debug("\n%c: Character is not alphabetical nor a number 0-9.\n", *c);
 
-        return c;
+        return "";
     }
 
     debug("   Before: %c\n", *c);
@@ -193,7 +193,7 @@ static uint8_t* charToTranslate(uint8_t* c){
 *   NULL => Memory error
 *   ptr to node => Successful
 */
-CharacterList* createNewCharacterNode(void){
+static CharacterList* createNewCharacterNode(void){
     CharacterList* new_node = calloc(1, sizeof(*new_node));
 
     if(!new_node){
@@ -214,6 +214,7 @@ CharacterList* createNewCharacterNode(void){
 *   1 => Passed a NULL pointer
 *   0 => Successful
 */
+
 static int32_t freeMorseCodeList(CharacterList* tail){
     if(tail == NULL){
         fprintf(stderr, "You passed a NULL head. RIP.\n");

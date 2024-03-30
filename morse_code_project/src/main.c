@@ -8,13 +8,17 @@
 
 int main(){
 
-    char text[] = "hElLo";
+    char text[] = "Hello";
 
     uint8_t* translation = phraseToTranslate(text);
 
     /* Spaced over to match with debug in blink_led*/
     debug("Phrase in main:     %s\n", translation);
     
-    blink_led(translation);
+    /* SLEEP SECONDS, CALL AMOUNT */
+    uint32_t sleep_stats[2] = {0, 0};
+    
+    blink_led(translation, sleep_stats);
+    
     return 0;
 }

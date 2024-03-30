@@ -1,6 +1,5 @@
 set(TEST_FILES
     "test.c"
-    "test.h"
     "unity_internals.h"
     "unity.c"
     "unity.h")

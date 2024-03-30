@@ -40,6 +40,11 @@
 #           Features:
 #               [ ] A cookie
 #               [X] A working binary for milk (maybe)
+#
+#       -td DEBUG VERSION FOR TARGET
+#           Features:  
+#               [X] Debug 
+#               [X] A working binary for milk (maybe)
 # 
 # Usage:
 # ./build.py -<ARGUMENT>
@@ -67,6 +72,7 @@ Arguments:
 
     Building for TARGET:
     -t:     Builds for the MILKV-DUO
+    -td:    DEBUG version for MILKV
 
 Help:
     --help
@@ -97,7 +103,7 @@ if(sys.argv[1] == '-p' or sys.argv[1] == '-P'):
     ensure_build_directory()
     current_directory = os.getcwd()
     os.chdir(f"{current_directory}/build")
-    subprocess.run(["cmake", ".."])
+    subprocess.run(["cmake", "..", "-DHOST=ON"])
     subprocess.run(["cmake", "--build", "."])
     os.chdir("../bin")
     subprocess.run(["./Executable"])
@@ -129,7 +135,7 @@ elif(sys.argv[1] == "-d" or sys.argv[1] == "-D"):
     
     os.chdir(f"{current_directory}/build")
     
-    subprocess.run(["cmake", "..", "-DDEBUG=ON"])
+    subprocess.run(["cmake", "..", "-DDEBUG=ON", "-DHOST=ON"])
     subprocess.run(["cmake", "--build", "."])
     
     os.chdir("../bin")
@@ -145,7 +151,7 @@ elif(sys.argv[1] == "-u" or sys.argv[1] == "-U"):
     
     os.chdir(f"{current_directory}/build")
     
-    subprocess.run(["cmake", "..", "-DCOMPILE_TEST=ON"])
+    subprocess.run(["cmake", "..", "-DCOMPILE_TEST=ON", "-DHOST=ON"])
     subprocess.run(["cmake", "--build", "."])
     
     os.chdir("../bin")
@@ -153,7 +159,7 @@ elif(sys.argv[1] == "-u" or sys.argv[1] == "-U"):
 
     sys.exit()
 
-#UNIT TESTING + DEBUG VERSIOn
+#UNIT TESTING + DEBUG VERSION
 elif(sys.argv[1] == "-v" or sys.argv[1] == "-V"):
     ensure_build_directory()
     
@@ -161,7 +167,7 @@ elif(sys.argv[1] == "-v" or sys.argv[1] == "-V"):
     
     os.chdir(f"{current_directory}/build")
     
-    subprocess.run(["cmake", "..", "-DCOMPILE_TEST=ON", "-DDEBUG=ON"])
+    subprocess.run(["cmake", "..", "-DCOMPILE_TEST=ON", "-DDEBUG=ON", "-DHOST=ON"])
     subprocess.run(["cmake", "--build", "."])
     
     os.chdir("../bin")
@@ -181,6 +187,35 @@ elif(sys.argv[1] == "-t" or sys.argv[1] == "-T"):
         "-t", f"{image_name}", 
         "bash", "-c",
         "cd build && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/app/milkv_duo.cmake ..",
+    ]
+
+    subprocess.run(build_command)
+
+    compile_command = [
+        "docker",
+        "run", "--rm", "-v",
+        f"{os.getcwd()}:/app",
+        "-t", f"{image_name}",
+        "bash", "-c",
+        "cd build && cmake --build .",
+    ]
+
+    subprocess.run(compile_command)
+
+    sys.exit()
+#TARGET (milk) VERSION
+elif(sys.argv[1] == "-td" or sys.argv[1] == "-TD"):
+    ensure_build_directory()
+
+    image_name = "morse-code-project"
+
+    build_command = [
+        "docker",
+        "run", "--rm", "-v",
+        f"{os.getcwd()}:/app",
+        "-t", f"{image_name}", 
+        "bash", "-c",
+        "cd build && cmake -DDEBUG=ON -DCOMPILE_TEST=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/app/milkv_duo.cmake ..",
     ]
 
     subprocess.run(build_command)
