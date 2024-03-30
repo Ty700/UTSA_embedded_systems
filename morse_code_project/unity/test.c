@@ -173,7 +173,7 @@ void test_LeadingSpacesTest(void){
 }
 
 void test_TrailingSpacesTest(void){
-    uint8_t phrase[] = "         Hello";
+    uint8_t phrase[] = "Hello         ";
 
     uint8_t* output = phraseToTranslate(phrase);
 
