@@ -62,8 +62,8 @@ USAGE:
         
         Notes: 
             - The text char array in src/main.c will be the message that is blinked out in Morse code.
-            - Can not unit tests on target for obvious reasons. Those are mainly to test morse code logic.
-            
+            - Can not run unit tests on target for obvious reasons. Those are mainly to test morse code logic.
+
         -t <= "Target"
             Features:
                 [ ] A cookie (Ran out)
