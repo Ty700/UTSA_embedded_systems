@@ -182,6 +182,16 @@ void test_TrailingSpacesTest(void){
     TEST_ASSERT_EQUAL_STRING(expected, output);
 }
 
+void test_LeadingAndTrailingSpacesTest(void){
+    uint8_t phrase[] = "                  Hello         ";
+
+    uint8_t* output = phraseToTranslate(phrase);
+
+    uint8_t* expected = ".... . .-.. .-.. ---";
+
+    TEST_ASSERT_EQUAL_STRING(expected, output);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_AlphabeticInput);
@@ -199,5 +209,6 @@ int main(void) {
     RUN_TEST(test_AlphaAndNumberAndSpacesEdgeCase);
     RUN_TEST(test_LeadingSpacesTest);
     RUN_TEST(test_TrailingSpacesTest);
+    RUN_TEST(test_LeadingAndTrailingSpacesTest);
     UNITY_END();
 }
