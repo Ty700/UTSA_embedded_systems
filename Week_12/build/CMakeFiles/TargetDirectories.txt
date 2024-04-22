@@ -1,0 +1,8 @@
+/app/build/CMakeFiles/edit_cache.dir
+/app/build/CMakeFiles/rebuild_cache.dir
+/app/build/lib/CMakeFiles/libssd1306.dir
+/app/build/lib/CMakeFiles/edit_cache.dir
+/app/build/lib/CMakeFiles/rebuild_cache.dir
+/app/build/src/CMakeFiles/ssd1306_bin.dir
+/app/build/src/CMakeFiles/edit_cache.dir
+/app/build/src/CMakeFiles/rebuild_cache.dir
