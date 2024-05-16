@@ -1,0 +1,51 @@
+plugins/dynamic-security/CMakeFiles/mosquitto_dynamic_security.dir/auth.c.o: \
+ /app/plugins/dynamic-security/auth.c \
+ /duo-sdk/rootfs/usr/include/stdc-predef.h /app/config.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/opensslconf.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/opensslv.h \
+ /app/cJSON/install_cv1800b_cjson/include/cjson/cJSON.h \
+ /duo-sdk/riscv64-linux-musl-x86_64/lib/gcc/riscv64-unknown-linux-musl/10.2.0/include/stddef.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/bio.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/e_os2.h \
+ /duo-sdk/rootfs/usr/include/inttypes.h \
+ /duo-sdk/rootfs/usr/include/features.h \
+ /duo-sdk/riscv64-linux-musl-x86_64/lib/gcc/riscv64-unknown-linux-musl/10.2.0/include/stdint.h \
+ /duo-sdk/rootfs/usr/include/stdint.h \
+ /duo-sdk/rootfs/usr/include/bits/alltypes.h \
+ /duo-sdk/rootfs/usr/include/bits/stdint.h \
+ /duo-sdk/rootfs/usr/include/stdio.h \
+ /duo-sdk/riscv64-linux-musl-x86_64/lib/gcc/riscv64-unknown-linux-musl/10.2.0/include/stdarg.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/crypto.h \
+ /duo-sdk/rootfs/usr/include/stdlib.h \
+ /duo-sdk/rootfs/usr/include/alloca.h /duo-sdk/rootfs/usr/include/time.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/safestack.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/stack.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/ossl_typ.h \
+ /duo-sdk/rootfs/usr/include/limits.h \
+ /duo-sdk/rootfs/usr/include/bits/limits.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/cryptoerr.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/symhacks.h \
+ /duo-sdk/rootfs/usr/include/pthread.h \
+ /duo-sdk/rootfs/usr/include/sched.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/bioerr.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/buffer.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/buffererr.h \
+ /duo-sdk/rootfs/usr/include/sys/types.h \
+ /duo-sdk/rootfs/usr/include/endian.h \
+ /duo-sdk/rootfs/usr/include/sys/select.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/evp.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/evperr.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/objects.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/obj_mac.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/asn1.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/asn1err.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/bn.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/bnerr.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/objectserr.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/rand.h \
+ /app/openssl/install_cv1800b_openssl/include/openssl/randerr.h \
+ /app/plugins/dynamic-security/dynamic_security.h /app/deps/uthash.h \
+ /duo-sdk/rootfs/usr/include/string.h \
+ /duo-sdk/rootfs/usr/include/strings.h /app/include/mosquitto.h \
+ /duo-sdk/riscv64-linux-musl-x86_64/lib/gcc/riscv64-unknown-linux-musl/10.2.0/include/stdbool.h \
+ /app/src/password_mosq.h /app/include/mosquitto_broker.h

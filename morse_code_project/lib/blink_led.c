@@ -117,13 +117,13 @@
 
 #endif /* HOST */
 
-/*
+/**
 * blink_led() -> Translates a phrase to morse code
 * 
-* @INPUTS:
+* @input:
 *    - Morse Code char array
 *
-* @RETURNS:
+* @param:
 *    VOID => Array elements are replaced in-place
 *
 *   TODO: ADD IRQ FOR NEW ENGLISH PHRASE???

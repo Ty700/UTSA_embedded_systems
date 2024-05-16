@@ -1,0 +1,2 @@
+//duo-sdk/riscv64-linux-musl-x86_64/bin/riscv64-unknown-linux-musl-ar qc libcjson_utils.a CMakeFiles/cjson_utils-static.dir/cJSON_Utils.c.o
+//duo-sdk/riscv64-linux-musl-x86_64/bin/riscv64-unknown-linux-musl-ranlib libcjson_utils.a

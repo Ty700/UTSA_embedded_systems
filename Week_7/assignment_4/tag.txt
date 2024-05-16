@@ -1,0 +1,3 @@
+docker push ty700/duo_sharedlib:latest
+
+docker pull ty700/duo_staticlib:latest

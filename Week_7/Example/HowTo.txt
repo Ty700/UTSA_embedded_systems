@@ -1,0 +1,184 @@
+Run make:
+    python3 build.py make
+
+Run make clean: 
+    python3 build.py make clean
+
+Run cmake ..: 
+    ./build.py cmake -DCMAKE_TOOLCHAIN_FILE=/app/milkv_duo.cmake ..
+
+Run cmake --build: 
+    ./build.py cmake --build .
+
+Run any other command:
+    python3 build.py <command>
+
+Reminder: replace "your-cc-image" with actual name of docker image in both scripts
+
+GDB Shortcuts
+    Breakpoints
+        break foobar
+            - sets a breakpoint at a function entry
+        
+        b foobar
+            - shorthand for break foobar
+        
+        break foobar.c:42
+            - sets a breakpoint on line 42 of foobar.c
+    
+    Examining Data
+        print <var> - prints variable val
+        print $reg  - prints reg val 
+        print task->files[0].fd - prints fd val? idk
+
+        or shorthand
+
+        p <var>
+        p $reg
+        p task->files[0].fd
+
+    Program Execution Control
+        continue 
+            - continue exe after break point
+            - shorthand: c 
+
+        next
+            - exe next line (stepping over functions)
+            - shorthand: n
+        
+        step
+            - step into functions 
+            - shorthand: s 
+
+        stepi 
+            - step by individual instructions 
+            - shorthand: si
+        
+        finish
+            - Executes until the current function returns
+
+    Stack Information
+        backtrace
+            - display call Stack
+            - shorthand: bt 
+            - this displays the current call stack, showing the 
+            functon call sequence that led to the current point in execution
+
+
+Remote GDB
+    - Most times need to run gdb on host computer since the majority 
+        of ES don't have room fo rit
+    
+    - Tools needed:
+        - ARCH-linux-gdb 
+            - used on the development workstation, offering all features of GDB
+        
+        - gdbserver
+            - a smaller footprint tool used on target system
+    
+    ON THE TARGET
+
+        Running a program through gdbserver
+
+        ssh:
+            gdbserver :<port> <executable> <args>
+        
+        or serial:
+            gdbserver /dev/ttyS0 <executable> <args>
+
+        - program execution does not start immediately; waits for a connection from gdb
+    
+        Attaching gdbserver to an already running program
+            gdbserver --attach :<port> <pid>
+        
+        Starting gdbserver without a specific program
+            gdbserver --multi :<port>
+
+    ON THE HOST
+        
+        Start ARCH-linux-gdb with the target executable
+            ARCH-linux-gdb <executable>
+        
+        Setting Up Shared Lib path in GDB
+            set sysroot <lib/path>
+                - typically lib/
+
+        Connecting to the target:
+            ssh:
+                target remote <ip-addr>:<port>
+            
+            serial:
+                target remote /dev/ttyUSB0
+
+            Note:
+                User target extended-remote instead of target remote if 
+                started gdbserver with --multi flag
+
+        Setting the program to debug
+            set remote exec-file <path/to/program/on/target>
+        
+    Using VSCode
+        - Download the toolchain https://drive.google.com/drive/folders/1YiuQraldtFexlks1BHYQNXjHDNqGuPaB?usp=sharing
+
+        - Copy gdbserver from the toolchain to milk-v duo
+
+            - you can find gdbserver using the command find . -name gdbserver
+            
+            - ./duo-toolchain-ARCH/riscv64-unknown-linux-musl/riscv64-unknown-linux-musl/debug-root/usr/bin/gdbserver
+            
+            - copy to the milk-v using scp 
+                - scp <file> root@192.168.42.1:/root/
+        
+    Compiling with debug symbols
+        - we will need to setup launch.JSON
+        COPY:
+            {
+                "version": "0.2.0",
+                "configurations": [
+                    {
+                        "name": "(gdb) Launch",
+                        "type": "cppdbg",
+                        "request": "launch",
+                        // This is the compiled binary path
+                        // The first `hello` is the project folder for hello world
+                        // The second `hello` is the compiled binary
+                        // format is <path>/<project>/<binary_name>
+                        "program": "${workspaceFolder}/hello/hello",
+                        "args": [],
+                        "stopAtEntry": false,
+                        // The milk-v duo IP address and custom port for debugging
+                        "miDebuggerServerAddress": "192.168.42.1:1234",
+                        // The current working directory
+                        // <path>/<project>
+                        "cwd": "${workspaceFolder}/hello",
+                        "environment": [],
+                        "externalConsole": false,
+                        "MIMode": "gdb",
+                        // Path to your toolchain gdb binary
+                        "miDebuggerPath": "${env:HOME}/embedded_systems/duo-toolchain-x86-64/riscv64-unknown-linux-musl/bin/riscv64-unknown-linux-musl-gdb",
+                        "setupCommands": [
+                            {
+                                "description": "Enable pretty-printing for gdb",
+                                "text": "-enable-pretty-printing",
+                                "ignoreFailures": true
+                            },
+                            {
+                                "description": "Set Disassembly Flavor to Intel",
+                                "text": "-gdb-set disassembly-flavor intel",
+                                "ignoreFailures": true
+                            }
+                        ]
+                    }
+                ]
+            }
+    
+        On the milk-v log in, copy hello binary or some executable
+    
+        Start gdbserver on the target
+            ./gdbserver :1234 hello
+                - This places gdb in a wating for connection stopAtEntry
+        
+        Now on the host, click run and then start debugging. This will make a connection to the remote debugger
+        and you can setup breakpoints and step through like normal
+
+        

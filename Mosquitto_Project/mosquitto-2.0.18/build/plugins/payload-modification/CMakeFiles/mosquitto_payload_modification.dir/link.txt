@@ -1,0 +1,1 @@
+//duo-sdk/riscv64-linux-musl-x86_64/bin/riscv64-unknown-linux-musl-gcc --sysroot=//duo-sdk/rootfs -fPIC  -lwiringx -lwiringx -shared  -o mosquitto_payload_modification.so CMakeFiles/mosquitto_payload_modification.dir/mosquitto_payload_modification.c.o   -L/app 
